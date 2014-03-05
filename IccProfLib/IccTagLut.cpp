@@ -763,6 +763,9 @@ bool CIccTagParametricCurve::Read(icUInt32Number size, CIccIO *pIO)
 
     if (pIO->Read32(GetParams(), m_nNumParam) != m_nNumParam)
       return false;
+
+    /* init */
+    Begin();
   }
 
   return true;
