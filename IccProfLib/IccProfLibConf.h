@@ -73,7 +73,7 @@ namespace sampleICC {
 #endif
 
 //PC, visual C++
-#if defined(_MSC_VER) && !defined(__MWERKS__) && defined(_M_IX86)
+#if defined(_MSC_VER) && !defined(__MWERKS__) && (defined(_M_IX86) || defined(_M_X64) || defined(__amd64__))
 
   //Define how 64 bit integers are represented
   #define ICCUINT64 unsigned __int64

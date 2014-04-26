@@ -348,7 +348,7 @@ CIccFileIO::~CIccFileIO()
 
 bool CIccFileIO::Open(const icChar *szFilename, const icChar *szAttr)
 {
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
   char myAttr[20];
 
   if (!strchr(szAttr, 'b')) {
@@ -368,7 +368,7 @@ bool CIccFileIO::Open(const icChar *szFilename, const icChar *szAttr)
 }
 
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 bool CIccFileIO::Open(const icWChar *szFilename, const icWChar *szAttr)
 {
   icWChar myAttr[20];

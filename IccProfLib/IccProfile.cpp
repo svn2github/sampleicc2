@@ -68,7 +68,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
   #pragma warning( disable: 4786) //disable warning in <list.h>
 #endif
 #include <time.h>
@@ -1820,7 +1820,7 @@ bool CIccProfile::CheckFileSize(CIccIO *pIO) const
   if (FileSize != m_Header.size)
     return false;
 
-  if ((FileSize%4 != 0) || (m_Header.size%4 != 0))
+  if ((m_Header.version>=icVersionNumberV4_2) && ((FileSize%4 != 0) || (m_Header.size%4 != 0)))
     return false;
 
 
@@ -1977,7 +1977,7 @@ CIccProfile* ReadIccProfile(const icChar *szFilename)
 }
 
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 /**
 *****************************************************************************
 * Name: ReadIccProfile
@@ -2085,7 +2085,7 @@ CIccProfile* OpenIccProfile(const icChar *szFilename)
   return pIcc;
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 /**
 ******************************************************************************
 * Name: OpenIccProfile
@@ -2207,7 +2207,7 @@ CIccProfile* ValidateIccProfile(CIccIO *pIO, std::string &sReport, icValidateSta
   return pIcc;
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 /**
 ******************************************************************************
 * Name: ValidateIccProfile
@@ -2324,7 +2324,7 @@ bool SaveIccProfile(const icChar *szFilename, CIccProfile *pIcc, icProfileIDSave
   return true;
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 /**
 ******************************************************************************
 * Name: SaveIccProfile
@@ -2426,7 +2426,7 @@ bool CalcProfileID(const icChar *szFilename, icProfileID *pProfileID)
   return true;
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 /**
 ****************************************************************************
 * Name: CalcProfileID

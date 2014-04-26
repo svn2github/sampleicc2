@@ -150,7 +150,7 @@ public:
   virtual ~CIccFileIO();
 
   bool Open(const icChar *szFilename, const icChar *szAttr);
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
   bool Open(const icWChar *szFilename, const icWChar *szAttr);
 #endif
   virtual void Close();

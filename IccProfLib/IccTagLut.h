@@ -191,11 +191,10 @@ public:
   icUInt16Number GetFunctionType() const {return m_nFunctionType; }
 
   icUInt16Number GetNumParam() const { return m_nNumParam; }
-  icS15Fixed16Number *GetParams() const { return m_Param; }
-  icS15Fixed16Number Param(int index) const { return m_Param[index]; }
-  icS15Fixed16Number& operator[](int index) { return m_Param[index]; }
+  icFloatNumber *GetParams() const { return m_dParam; }
+  icFloatNumber Param(int index) const { return m_dParam[index]; }
+  icFloatNumber& operator[](int index) { return m_dParam[index]; }
 
-  virtual void Begin();
   virtual icFloatNumber Apply(icFloatNumber v) { return DoApply(v); }
   virtual icValidateStatus Validate(icTagSignature sig, std::string &sReport, const CIccProfile* pProfile=NULL) const;
   virtual bool IsIdentity();
@@ -204,9 +203,7 @@ public:
 protected:
   icFloatNumber DoApply(icFloatNumber v) const;
   icUInt16Number      m_nFunctionType;
-  icS15Fixed16Number *m_Param;
   icUInt16Number      m_nNumParam;
-
   icFloatNumber *m_dParam;
 };
 

@@ -68,7 +68,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 #pragma warning( disable: 4786) //disable warning in <list.h>
 #endif
 

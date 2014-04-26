@@ -59,6 +59,16 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - April 2014 - 1.6.8 release
+ *   - 1.6.8 release
+ *   - Modified CIccTagParametricCurve to use icFloatNumber rather than icS15Fixed16Number
+ *     for internal storage purposes.  Fixes crashing bug with profile verification.
+ *   - Added check for named color profile class when icSigNamedColor2Tag is filed
+ *   - Changed #ifdef WIN32 to #if defined(WIN32) || defined(WIN64)
+ *   - Added zeros to end of PRMG gamut for easy detection of end of gamut
+ *   - Removed 4 byte alignment check for profile length for versions before v4.2
+ *   - Fixed bug with copy of data in CIccTagColorantTable objects
+ *
  * - August 2012 - 1.6.7 release
  *   - 1.6.7 release
  *   - Made const functions more consistent

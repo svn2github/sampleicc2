@@ -68,7 +68,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
   #pragma warning( disable: 4786) //disable warning in <list.h>
   #include <windows.h>
 #endif
@@ -5058,7 +5058,7 @@ CIccTagColorantTable::CIccTagColorantTable(const CIccTagColorantTable &ITCT)
   m_nCount = ITCT.m_nCount;
 
   m_pData = (icColorantTableEntry*)calloc(m_nCount, sizeof(icColorantTableEntry));
-  memcpy(m_pData, ITCT.m_pData, sizeof(m_pData));
+  memcpy(m_pData, ITCT.m_pData, m_nCount * sizeof(icColorantTableEntry));
 }
 
 
@@ -5083,7 +5083,7 @@ CIccTagColorantTable &CIccTagColorantTable::operator=(const CIccTagColorantTable
   if (m_pData)
     free(m_pData);
   m_pData = (icColorantTableEntry*)calloc(m_nCount, sizeof(icColorantTableEntry));
-  memcpy(m_pData, ColorantTableTag.m_pData, sizeof(m_pData));
+  memcpy(m_pData, ColorantTableTag.m_pData, m_nCount * sizeof(icColorantTableEntry));
 
   return *this;
 }

@@ -70,7 +70,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
   #pragma warning( disable: 4786) //disable warning in <list.h>
   #include <windows.h>
 #endif
@@ -628,7 +628,6 @@ icValidateStatus CIccTagCurve::Validate(icTagSignature sig, std::string &sReport
 */
 CIccTagParametricCurve::CIccTagParametricCurve()
 {
-  m_Param = NULL;
   m_nFunctionType = 0xffff;
   m_nNumParam = 0;
   m_dParam = NULL;
@@ -651,14 +650,8 @@ CIccTagParametricCurve::CIccTagParametricCurve(const CIccTagParametricCurve &ITP
   m_nFunctionType = ITPC.m_nFunctionType;
   m_nNumParam = ITPC.m_nNumParam;
 
-  m_Param = new icS15Fixed16Number[m_nNumParam];
-  memcpy(m_Param, ITPC.m_Param, m_nNumParam*sizeof(icS15Fixed16Number));  
-	m_dParam = NULL;
-	if (ITPC.m_dParam)
-	{
-		m_dParam = new icFloatNumber[m_nNumParam];
-		memcpy(m_dParam, ITPC.m_dParam, m_nNumParam*sizeof(icFloatNumber));
-	}
+  m_dParam = new icFloatNumber[m_nNumParam];
+  memcpy(m_dParam, ITPC.m_dParam, m_nNumParam*sizeof(icFloatNumber));  
 }
 
 
@@ -680,17 +673,10 @@ CIccTagParametricCurve &CIccTagParametricCurve::operator=(const CIccTagParametri
   m_nFunctionType = ParamCurveTag.m_nFunctionType;
   m_nNumParam = ParamCurveTag.m_nNumParam;
 
-  if (m_Param)
-    delete [] m_Param;
-  m_Param = new icS15Fixed16Number[m_nNumParam];
-  memcpy(m_Param, ParamCurveTag.m_Param, m_nNumParam*sizeof(icS15Fixed16Number));  
-
-  m_dParam = NULL;
-	if (ParamCurveTag.m_dParam)
-	{
-		m_dParam = new icFloatNumber[m_nNumParam];
-		memcpy(m_dParam, ParamCurveTag.m_dParam, m_nNumParam*sizeof(icFloatNumber));
-	}
+  if (m_dParam)
+    delete [] m_dParam;
+	m_dParam = new icFloatNumber[m_nNumParam];
+	memcpy(m_dParam, ParamCurveTag.m_dParam, m_nNumParam*sizeof(icFloatNumber));
 
   return *this;
 }
@@ -706,9 +692,6 @@ CIccTagParametricCurve &CIccTagParametricCurve::operator=(const CIccTagParametri
 */
 CIccTagParametricCurve::~CIccTagParametricCurve()
 {
-  if (m_Param)
-    delete [] m_Param;
-
   if (m_dParam)
     delete [] m_dParam;
 }
@@ -754,18 +737,20 @@ bool CIccTagParametricCurve::Read(icUInt32Number size, CIccIO *pIO)
 
   if (!m_nNumParam) {
     m_nNumParam = (icUInt16Number)((size-nHdrSize) / sizeof(icS15Fixed16Number));
-    m_Param = new icS15Fixed16Number[m_nNumParam];
+    m_dParam = new icFloatNumber[m_nNumParam];
   }
 
   if (m_nNumParam) {
+    int i;
     if (nHdrSize + m_nNumParam*sizeof(icS15Fixed16Number) > size)
       return false;
 
-    if (pIO->Read32(GetParams(), m_nNumParam) != m_nNumParam)
-      return false;
-
-    /* init */
-    Begin();
+    for (i=0; i<m_nNumParam; i++) {
+      icS15Fixed16Number num;
+      if (!pIO->Read32(&num, 1))
+        return false;
+      m_dParam[i]=icFtoD(num);
+    }
   }
 
   return true;
@@ -802,8 +787,12 @@ bool CIccTagParametricCurve::Write(CIccIO *pIO)
     return false;
 
   if (m_nNumParam) {
-    if (pIO->Write32(GetParams(), m_nNumParam) != m_nNumParam)
-      return false;
+    int i;
+    for (i=0; i<m_nNumParam; i++) {
+      icS15Fixed16Number num = icDtoF(m_dParam[i]);
+      if (!pIO->Write32(&num, 1))
+        return false;
+    }
   }
 
   if (!pIO->Align32())
@@ -832,52 +821,52 @@ void CIccTagParametricCurve::Describe(std::string &sDescription)
 
   switch(m_nFunctionType) {
 case 0x0000:
-  sprintf(buf, "Y = X ^ %.4lf\r\n", icFtoD(m_Param[0]));
+  sprintf(buf, "Y = X ^ %.4lf\r\n", m_dParam[0]);
   sDescription += buf;
   return;
 
 case 0x0001:
   sprintf(buf, "Y = 0 when (X < %.4lf / %.4lf)\r\n",
-    -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
+    -m_dParam[2], m_dParam[1]);
   sDescription += buf;
 
   sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf   when (X >= %.4lf / %.4lf)\r\n",
-    icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
-    -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
+    m_dParam[1], m_dParam[2], m_dParam[0],
+    m_dParam[2], m_dParam[1]);
   sDescription += buf;
   return;
 
 case 0x0002:
-  sprintf(buf, "Y = %.4lf   when (X < %.4lf / %.4lf)\r\n", icFtoD(m_Param[3]),
-    -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
+  sprintf(buf, "Y = %.4lf   when (X < %.4lf / %.4lf)\r\n", m_dParam[3],
+    -m_dParam[2], m_dParam[1]);
   sDescription += buf;
 
   sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf + %.4lf   when (X >= %.4lf / %.4lf)\r\n",
-    icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
-    icFtoD(m_Param[3]),
-    -icFtoD(m_Param[2]), icFtoD(m_Param[1]));
+    m_dParam[1], m_dParam[2], m_dParam[0],
+    m_dParam[3],
+    -m_dParam[2], m_dParam[1]);
   sDescription += buf;
   return;
 
 case 0x0003:
   sprintf(buf, "Y = %lf * X   when (X < %.4lf)\r\n",
-    icFtoD(m_Param[3]), icFtoD(m_Param[4]));
+    m_dParam[3], m_dParam[4]);
   sDescription += buf;
 
   sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf   when (X >= %.4lf)\r\n",
-    icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
-    icFtoD(m_Param[4]));
+    m_dParam[1], m_dParam[2], m_dParam[0],
+    m_dParam[4]);
   sDescription += buf;
   return;
 
 case 0x0004:
   sprintf(buf, "Y = %lf * X + %.4lf  when (X < %.4lf)\r\n",
-    icFtoD(m_Param[3]), icFtoD(m_Param[6]), icFtoD(m_Param[4]));
+    m_dParam[3], m_dParam[6], m_dParam[4]);
   sDescription += buf;
 
   sprintf(buf, "Y = (%.4lf * X + %.4lf) ^ %.4lf + %.4lf  when (X >= %.4lf)\r\n",
-    icFtoD(m_Param[1]), icFtoD(m_Param[2]), icFtoD(m_Param[0]),
-    icFtoD(m_Param[5]), icFtoD(m_Param[4]));
+    m_dParam[1], m_dParam[2], m_dParam[0],
+    m_dParam[5], m_dParam[4]);
   sDescription += buf;
   return;
 
@@ -887,7 +876,7 @@ default:
   sDescription += buf;
 
   for (i=0; i<m_nNumParam; i++) {
-    sprintf(buf, "Param[%d] = %.4lf\r\n", i, icFtoD(m_Param[i]));
+    sprintf(buf, "Param[%d] = %.4lf\r\n", i, m_dParam[i]);
     sDescription += buf;
   }
   }
@@ -961,39 +950,19 @@ bool CIccTagParametricCurve::SetFunctionType(icUInt16Number nFunctionType)
       nNumParam = 0;
   }
 
-  if (m_Param)
-    delete m_Param;
+  if (m_dParam)
+    delete m_dParam;
   m_nNumParam = nNumParam;
   m_nFunctionType = nFunctionType;
 
   if (m_nNumParam)
-    m_Param = new icS15Fixed16Number[m_nNumParam];
+    m_dParam = new icFloatNumber[m_nNumParam];
   else
-    m_Param = NULL;
+    m_dParam = NULL;
 
   return true;
 }
 
-
-/**
-****************************************************************************
-* Name: CIccTagParametricCurve::Begin
-* 
-* Purpose: Initializes the curve. Must be called before Apply().
-*
-*****************************************************************************
-*/
-void CIccTagParametricCurve::Begin()
-{
-  if (m_dParam)
-    delete m_dParam;
-
-  m_dParam = new icFloatNumber[m_nNumParam];
-
-  int i;
-  for (i=0; i<m_nNumParam; i++) 
-    m_dParam[i] = icFtoD(m_Param[i]);
-}
 
 /**
 ****************************************************************************
@@ -1009,7 +978,7 @@ bool CIccTagParametricCurve::IsIdentity()
 {
   switch(m_nFunctionType) {
     case 0x0000:
-      return IsUnity(icFtoD(m_Param[0]));
+      return IsUnity(m_dParam[0]);
 
     case 0x0001:
     case 0x0002:

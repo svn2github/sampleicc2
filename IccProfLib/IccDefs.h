@@ -111,7 +111,7 @@ typedef float              icFloatNumber;
 
 /* For string operations */
 typedef char                icChar;
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 typedef wchar_t             icWChar;
 #endif
 

@@ -70,7 +70,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 #pragma warning( disable: 4786) //disable warning in <list.h>
 #endif
 
@@ -5555,7 +5555,7 @@ icStatusCMM CIccNamedColorCmm::AddXform(CIccProfile *pProfile,
     {
       CIccTagNamedColor2 *pTag = (CIccTagNamedColor2*)pProfile->FindTag(icSigNamedColor2Tag);
 
-      if (pTag) {
+      if (pTag && (pProfile->m_Header.deviceClass==icSigNamedColorClass || nLutType==icXformLutNamedColor)) {
         if (bInput) {
           nSrcSpace = icSigNamedData;
         }

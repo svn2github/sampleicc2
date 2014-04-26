@@ -67,7 +67,7 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
 
       if (pCurves[i]->GetType()==icSigParametricCurveType) {
         CIccTagParametricCurve *pParCurve = (CIccTagParametricCurve*)pCurves[i];
-        icS15Fixed16Number *parParams = pParCurve->GetParams();
+        icFloatNumber *parParams = pParCurve->GetParams();
 
         if (bStrict) {
           pFormula = new CIccFormulaCurveSegment(icMinFloat32Number, 0.0);
@@ -85,7 +85,7 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
         case 0x0000:
           pFormula = new CIccFormulaCurveSegment(startPos, endPos);
 
-          params[0] = icFtoD(parParams[0]);
+          params[0] = parParams[0];
           params[1] = 1.0;
           params[2] = 0.0;
           params[3] = 0.0;
@@ -96,8 +96,8 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
           break;
 
         case 0x0001:
-          a = icFtoD(parParams[1]);
-          b = icFtoD(parParams[2]);
+          a = parParams[1];
+          b = parParams[2];
 
           pFormula = new CIccFormulaCurveSegment(startPos, -b / a);
           params[0] = 1.0;
@@ -109,7 +109,7 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
           pCurve->Insert(pFormula);
 
           pFormula = new CIccFormulaCurveSegment(-b / a, endPos);
-          params[0] = icFtoD(parParams[0]);
+          params[0] = parParams[0];
           params[1] = a;
           params[2] = b;
           params[3] = 0.0;
@@ -120,23 +120,23 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
           break;
 
         case 0x0002:
-          a = icFtoD(parParams[1]);
-          b = icFtoD(parParams[2]);
+          a = parParams[1];
+          b = parParams[2];
 
           pFormula = new CIccFormulaCurveSegment(startPos, -b / a);
           params[0] = 1.0;
           params[1] = 0.0;
           params[2] = 0.0;
-          params[3] = icFtoD(parParams[3]);
+          params[3] = parParams[3];
 
           pFormula->SetFunction(0, 4, params);
           pCurve->Insert(pFormula);
 
           pFormula = new CIccFormulaCurveSegment(-b / a, endPos);
-          params[0] = icFtoD(parParams[0]);
+          params[0] = parParams[0];
           params[1] = a;
           params[2] = b;
-          //params[3] = icFtoD(parParams[3]);  //Already set
+          //params[3] = parParams[3];  //Already set
 
           pFormula->SetFunction(0, 4, params);
           pCurve->Insert(pFormula);
@@ -144,21 +144,21 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
           break;
 
         case 0x0003:
-          d = icFtoD(parParams[4]);
+          d = parParams[4];
 
           pFormula = new CIccFormulaCurveSegment(startPos, d);
           params[0] = 1.0;
           params[1] = 0.0;
           params[2] = 0.0;
-          params[3] = icFtoD(parParams[3]);
+          params[3] = parParams[3];
 
           pFormula->SetFunction(0, 4, params);
           pCurve->Insert(pFormula);
 
           pFormula = new CIccFormulaCurveSegment(d, endPos);
-          params[0] = icFtoD(parParams[0]);
-          params[1] = icFtoD(parParams[1]);
-          params[2] = icFtoD(parParams[2]);
+          params[0] = parParams[0];
+          params[1] = parParams[1];
+          params[2] = parParams[2];
           params[3] = 0.0;
 
           pFormula->SetFunction(0, 4, params);
@@ -167,22 +167,22 @@ CIccMultiProcessElement *ConvertCurves(LPIccCurve *pCurves, int nCurves, bool bS
           break;
 
         case 0x0004:
-          d = icFtoD(parParams[4]);
+          d = parParams[4];
 
           pFormula = new CIccFormulaCurveSegment(startPos, d);
           params[0] = 1.0;
-          params[1] = icFtoD(parParams[3]);
-          params[2] = icFtoD(parParams[6]);
+          params[1] = parParams[3];
+          params[2] = parParams[6];
           params[3] = 0.0;
 
           pFormula->SetFunction(0, 4, params);
           pCurve->Insert(pFormula);
 
           pFormula = new CIccFormulaCurveSegment(d, endPos);
-          params[0] = icFtoD(parParams[0]);
-          params[1] = icFtoD(parParams[1]);
-          params[2] = icFtoD(parParams[2]);
-          params[3] = icFtoD(parParams[5]);
+          params[0] = parParams[0];
+          params[1] = parParams[1];
+          params[2] = parParams[2];
+          params[3] = parParams[5];
           
           pFormula->SetFunction(0, 4, params);
           pCurve->Insert(pFormula);
