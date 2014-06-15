@@ -1896,7 +1896,7 @@ void CIccUTF16String::FromWString(const std::wstring &buf)
 {
 #ifdef ICC_WCHAR_32BIT
   size_t sizeSrc = buf.size();
-  wchar_t *szStr = buf.c_str();
+  const wchar_t *szStr = buf.c_str();
 
   if (sizeSrc) {
     size_t nAlloc = AllocSize(sizeSrc*2);
@@ -1950,9 +1950,13 @@ const wchar_t *CIccUTF16String::ToWString(std::wstring &buf) const
     buf += (wchar_t)0x20;
   }
   icUInt16Number *srcStr = m_str;
-  UTF32 *dstStr = buf.c_str();
+  UTF32 *tmp = (UTF32*)malloc(sizeof(UTF32) * buf.size());
 
-  icConvertUTF16toUTF32((UTF16**)&srcStr, &strStr[m_len], &dstStr, &dstStr[buf.size()], lenientConversion);
+  if(tmp)
+  icConvertUTF16toUTF32((const UTF16**)&srcStr, &srcStr[m_len], &tmp, &tmp[buf.size()], lenientConversion);
+  buf = (wchar_t*)tmp;
+
+  if(tmp) free(tmp); tmp = NULL;
 #else
   size_t i;
 
