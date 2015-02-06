@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 
   if (argc<=1) {
 print_usage:
-    printf("Usage: iccDumpProfile profile {tagId to dump/\"ALL\")\n");
+    printf("Usage: iccDumpProfile [-v] profile [tagId to dump/\"ALL\"]\n");
     return -1;
   }
 
@@ -120,6 +120,9 @@ print_usage:
 
     pIcc = ValidateIccProfile(argv[nArg], sReport, nStatus);
   }
+  else
+  if (strncmp(argv[1], "-h", 2) == 0)
+    goto print_usage;
   else
     pIcc = OpenIccProfile(argv[nArg]);
 
