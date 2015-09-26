@@ -12,7 +12,7 @@
  * The ICC Software License, Version 0.2
  *
  *
- * Copyright (c) 2003-2010 The International Color Consortium. All rights 
+ * Copyright (c) 2003-2015 The International Color Consortium. All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -2826,7 +2826,7 @@ CIccTagFixedNum<T, Tsig>::CIccTagFixedNum(const CIccTagFixedNum<T, Tsig> &ITFN)
 {
   m_nSize = ITFN.m_nSize;
   m_Num = (T*)calloc(m_nSize, sizeof(T));
-  memcpy(m_Num, ITFN.m_Num, sizeof(m_Num));
+  memcpy(m_Num, ITFN.m_Num, m_nSize * sizeof(m_Num));
 }
 
 
@@ -2851,7 +2851,7 @@ CIccTagFixedNum<T, Tsig> &CIccTagFixedNum<T, Tsig>::operator=(const CIccTagFixed
   if (m_Num)
     free(m_Num);
   m_Num = (T*)calloc(m_nSize, sizeof(T));
-  memcpy(m_Num, ITFN.m_Num, sizeof(m_Num));
+  memcpy(m_Num, ITFN.m_Num, m_nSize * sizeof(m_Num));
 
   return *this;
 }

@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="wxProfileDump"
 	ProjectGUID="{8A0DC808-518D-4E2D-BD57-D7619D1CB7C3}"
+	RootNamespace="wxProfileDump"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -763,7 +764,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib"
+				AdditionalDependencies="wxmsw$(WXVER)_core.lib wxbase$(WXVER).lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib"
 				OutputFile="vc_msw\wxProfileDump.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -1345,7 +1346,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib"
+				AdditionalDependencies="wxmsw$(WXVER)d_core.lib wxbase$(WXVER)d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib"
 				OutputFile="vc_mswd\wxProfileDump.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -1789,10 +1790,10 @@
 			Name="Library Files"
 			>
 			<File
-				RelativePath="..\..\..\IccProfLib\Debug_CRTDLL\IccProfLib_CRTDLL.lib"
+				RelativePath="..\..\..\IccProfLib\Release_CRTDLL\IccProfLib_CRTDLL.lib"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1801,10 +1802,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\IccProfLib\Release_CRTDLL\IccProfLib_CRTDLL.lib"
+				RelativePath="..\..\..\IccProfLib\Debug_CRTDLL\IccProfLib_CRTDLL.lib"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
