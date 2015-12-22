@@ -131,6 +131,18 @@ icValidateStatus icMaxStatus(icValidateStatus s1, icValidateStatus s2)
   return s2;
 }
 
+static icInt32Number icHexDigit(icChar digit)
+{
+  if (digit>='0' && digit<='9')
+    return digit-'0';
+  if (digit>='A' && digit<='F')
+    return digit-'A'+10;
+/*  if (digit>='a' && digit<='f')
+    return digit-'a'+10;*/
+  return -1;
+}
+
+
 bool icIsSpaceCLR(icColorSpaceSignature sig) 
 {
   switch(sig) {
@@ -896,6 +908,15 @@ icUInt32Number icGetSpaceSamples(icColorSpaceSignature sig)
 
   case icSigNamedData:
   default:
+    {
+      //check for non-ICC compliant 'MCHx' case provided by littlecms
+      if ((sig&0xffffff00)==0x4d434800) {
+        int d0=icHexDigit(sig&0xff);
+        if (d0>0)
+          return d0;
+      }
+
+    }
     return 0;
   }
 }

@@ -1,3 +1,9 @@
+2015-12-22 Based on submission by Vitaly Bondar
+ * 1.6.10 release
+ * Fixed bug in copy data of copy constructors and copy operations of CIccTagUnkown, 
+   CIccTagNamedColor2, CIccTagChromaticity, CIccTagFixedNum, CIccTagNum, CIccTagData,
+   and CIccTagColorantOrder
+
 2015-09-26 Max Derhak
  * 1.6.9 release
  * Added check to black point compensation to check for negative values going into square root calculation

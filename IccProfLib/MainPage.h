@@ -59,6 +59,12 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - December 2015 - 1.6.10 release based on submission by Vitaly Bondar
+ *  - 1.6.10 release
+ *  - Fixed bug in copy data of copy constructors and copy operations of CIccTagUnkown, 
+ *    CIccTagNamedColor2, CIccTagChromaticity, CIccTagFixedNum, CIccTagNum, CIccTagData,
+ *    and CIccTagColorantOrder
+ *
  * - Sept 2015 - 1.6.9 release
  *  - 1.6.9 release
  *  - Added check to black point compensation to check for negative values going into square

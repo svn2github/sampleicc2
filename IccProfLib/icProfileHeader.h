@@ -544,6 +544,8 @@ typedef enum {
 #define icSig1colorData     ((icColorSpaceSignature) 0x31434C52)  /* '1CLR' */        
 #define icSig16colorData    ((icColorSpaceSignature) 0x47434C52)  /* 'GCLR' */
 
+/** Defined by LittleCMS **/
+
 /** Convenience Enum Definitions - Not defined in ICC specification*/
 #define icSigGamutData      ((icColorSpaceSignature) 0x67616D74)  /* 'gamt' */
 #define icSigUnknownData    ((icColorSpaceSignature) 0x3f3f3f3f)  /* '????' */
