@@ -563,6 +563,9 @@ int main(int argc, char* argv[])
           CIccProfile *p2 = ReadIccProfile(argv[2]);
           delete p2;
         }
+        else {
+          printf("Validation error!\n%s", report.c_str());
+        }
         delete pProfile;
       }
     }

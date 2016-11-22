@@ -1,3 +1,7 @@
+2016-11-22 Based on submission by Vitaly Bondar
+ * 1.6.11 release
+ * Fixed bug in validation of GamutTags
+
 2015-12-22 Based on submission by Vitaly Bondar
  * 1.6.10 release
  * Fixed bug in copy data of copy constructors and copy operations of CIccTagUnkown, 

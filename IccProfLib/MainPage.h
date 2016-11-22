@@ -59,6 +59,10 @@
  *   the configuration parameters in IccProfLibConf.h. 
  *
  *  <b>VERSION HISTORY</b>
+ * - December 2015 - 1.6.10 release
+ *  - 1.6.11 release
+ *  - Fixed bug in validation of GamutTags
+ *
  * - December 2015 - 1.6.10 release based on submission by Vitaly Bondar
  *  - 1.6.10 release
  *  - Fixed bug in copy data of copy constructors and copy operations of CIccTagUnkown, 

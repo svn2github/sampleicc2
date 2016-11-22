@@ -3156,7 +3156,7 @@ icValidateStatus CIccMBB::Validate(icTagSignature sig, std::string &sReport, con
     }
   case icSigGamutTag:
     {
-      nInput = 1;
+      nInput = icGetSpaceSamples(pProfile->m_Header.pcs);
       if (m_nInput!=nInput) {
         sReport += icValidateCriticalErrorMsg;
         sReport += sSigName;
@@ -3164,7 +3164,7 @@ icValidateStatus CIccMBB::Validate(icTagSignature sig, std::string &sReport, con
         rv = icMaxStatus(rv, icValidateCriticalError);
       }
 
-      nOutput = icGetSpaceSamples(pProfile->m_Header.colorSpace);
+      nOutput = 1;
       if (m_nOutput!=nOutput) {
         sReport += icValidateCriticalErrorMsg;
         sReport += sSigName;
